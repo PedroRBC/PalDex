@@ -1,5 +1,6 @@
 import { Pal, PalRequest } from '@/types/pal';
 import axios from 'axios';
+import { cache } from 'react';
 
 const API_BASE_URL = 'https://paldex-api.pedrorbc.com';
 
@@ -10,7 +11,7 @@ const api = axios.create({
   },
 });
 
-export async function getAllPals(): Promise<Pal[]> {
+export const getAllPals = cache(async (): Promise<Pal[]> => {
   try {
     const { data } = await api.get<PalRequest>('');
     return data.content;
@@ -20,9 +21,9 @@ export async function getAllPals(): Promise<Pal[]> {
     }
     throw error;
   }
-}
+});
 
-export async function getPalById(id: number): Promise<Pal> {
+export const getPalById = cache(async (id: number): Promise<Pal> => {
   try {
     const { data } = await api.get<{ content: Pal }>(`/${id}`);
     return data.content;
@@ -32,7 +33,7 @@ export async function getPalById(id: number): Promise<Pal> {
     }
     throw error;
   }
-}
+});
 
 export async function searchPalByName(query: string): Promise<Pal[]> {
   try {

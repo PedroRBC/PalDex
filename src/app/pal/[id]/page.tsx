@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ExternalLink } from "lucide-react";
-import { Metadata } from "next";
+import { Metadata, ResolvingMetadata } from "next";
 import { getTypeVariant } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -16,16 +16,24 @@ function formatName(name: string): string {
     .join(' ');
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const pal = await getPalById(parseInt(params.id));
+type Props = {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function generateMetadata({ params }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+  const { id } = (await params);
+  const pal = await getPalById(parseInt(id));
   
   return {
     title: `${pal.name}`,
   };
 }
 
-export default async function PalPage({ params }: { params: { id: string } }) {
-  const pal = await getPalById(parseInt(params.id));
+export default async function PalPage({ params }: Props ) {
+  const { id } = (await params);
+  const pal = await getPalById(parseInt(id));
 
   return (
     <main className="min-h-screen bg-background">
