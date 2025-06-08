@@ -43,7 +43,7 @@ export default async function PalPage({ params }: Props ) {
             variant="ghost"
             asChild
           >
-            <Link href="/">
+            <Link href="/" legacyBehavior>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to PalDex
             </Link>
@@ -52,7 +52,7 @@ export default async function PalPage({ params }: Props ) {
             variant="outline"
             asChild
           >
-            <Link href={pal.wiki} target="_blank" rel="noopener noreferrer">
+            <Link href={pal.wiki} target="_blank" rel="noopener noreferrer" legacyBehavior>
               View on Wiki
               <ExternalLink className="ml-2 h-4 w-4" />
             </Link>
