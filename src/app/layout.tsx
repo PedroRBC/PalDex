@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/Header";
 import { SearchProvider } from "@/contexts/SearchContext";
+import { TypeProvider } from "@/contexts/TypeContext";
+import BodyBackground from "@/components/BodyBackground";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +19,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} bg-background min-h-screen`}>
@@ -29,12 +31,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+        <TypeProvider>
           <SearchProvider>
+            <BodyBackground />
             <Header />
             <div className="container mx-auto px-4 py-8">
               {children}
             </div>
           </SearchProvider>
+          </TypeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -17,7 +17,7 @@ export default async function Home() {
 
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen">
       <SearchClient  pals={pals} />
     </main>
   );

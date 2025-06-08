@@ -4,10 +4,11 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, ExternalLink, Zap, Shield, Heart, Gauge, Star } from "lucide-react"
+import { ArrowLeft, ExternalLink, Zap, Shield, Heart, Gauge, Star, Map } from "lucide-react"
 import type { Metadata, ResolvingMetadata } from "next"
 import { getTypeVariant } from "@/lib/utils"
 import { cn } from "@/lib/utils"
+import TypeBackground from "@/components/TypeBackground"
 
 function formatName(name: string): string {
   return name
@@ -38,21 +39,6 @@ export default async function PalPage({ params }: Props) {
 
   const primaryType = pal.types[0]?.name.toLowerCase() || "normal"
 
-  const getTypeGradient = (type: string) => {
-    const gradients: Record<string, string> = {
-      fire: "from-red-500/10 via-orange-500/5 to-yellow-500/10",
-      water: "from-blue-500/10 via-cyan-500/5 to-blue-600/10",
-      grass: "from-green-500/10 via-emerald-500/5 to-green-600/10",
-      electric: "from-yellow-400/10 via-yellow-500/5 to-amber-500/10",
-      ice: "from-cyan-400/10 via-blue-300/5 to-indigo-400/10",
-      dark: "from-gray-800/10 via-gray-700/5 to-black/10",
-      dragon: "from-purple-600/10 via-indigo-500/5 to-purple-700/10",
-      neutral: "from-gray-400/10 via-gray-300/5 to-gray-500/10",
-      normal: "from-gray-400/10 via-gray-300/5 to-gray-500/10",
-    }
-    return gradients[type] || gradients.normal
-  }
-
   const maxStat = Math.max(
     pal.stats.hp,
     pal.stats.attack.melee,
@@ -78,16 +64,7 @@ export default async function PalPage({ params }: Props) {
   }
 
   return (
-    <main className={cn("min-h-screen bg-gradient-to-br", getTypeGradient(primaryType), "relative overflow-hidden")}>
-      {/* Animated background */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(255,255,255,0.1)_0%,transparent_50%)] animate-pulse" />
-        <div
-          className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.1)_0%,transparent_50%)] animate-pulse"
-          style={{ animationDelay: "1s" }}
-        />
-      </div>
-
+    <TypeBackground type={primaryType}>
       <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Header with enhanced styling */}
         <div className="flex items-center gap-4 mb-8">
@@ -211,6 +188,53 @@ export default async function PalPage({ params }: Props) {
                       </div>
                     </div>
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Spawn Maps Card */}
+            <Card className="backdrop-blur-sm bg-white/10 border-white/20 shadow-xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <div className="p-2 rounded-full bg-emerald-500/20">
+                    <Map className="w-5 h-5 text-emerald-500" />
+                  </div>
+                  Spawn Locations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 gap-4">
+                  {/* Day Map */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" />
+                      <span className="text-sm font-medium">Day Spawn</span>
+                    </div>
+                    <div className="relative aspect-video rounded-lg overflow-hidden border border-white/20">
+                      <Image
+                        src={`https://paldex-api.pedrorbc.com${pal.maps.day}`}
+                        alt={`${pal.name} day spawn locations`}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Night Map */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                      <span className="text-sm font-medium">Night Spawn</span>
+                    </div>
+                    <div className="relative aspect-video rounded-lg overflow-hidden border border-white/20">
+                      <Image
+                        src={`https://paldex-api.pedrorbc.com${pal.maps.night}`}
+                        alt={`${pal.name} night spawn locations`}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -388,6 +412,6 @@ export default async function PalPage({ params }: Props) {
           </div>
         </div>
       </div>
-    </main>
+    </TypeBackground>
   )
 }
