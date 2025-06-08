@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props, parent: ResolvingMetad
   const pal = await getPalById(Number.parseInt(id))
 
   return {
-    title: `${pal.name} - PalDex`,
+    title: `${pal.name}`,
     description: pal.description,
   }
 }
