@@ -4,13 +4,14 @@ import { useState, useMemo } from 'react';
 import { Pal, PalType } from '@/types/pal';
 import PalCard from './PalCard';
 import SearchAndFilter from './SearchAndFilter';
+import { useSearch } from '@/contexts/SearchContext';
 
 interface SearchClientProps {
   pals: Pal[];
 }
 
 export default function SearchClient({ pals }: SearchClientProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const { searchQuery } = useSearch();
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedRarity, setSelectedRarity] = useState<number | null>(null);
 
@@ -47,7 +48,7 @@ export default function SearchClient({ pals }: SearchClientProps) {
   return (
     <div>
       <SearchAndFilter
-        onSearch={setSearchQuery}
+        onSearch={() => {}} // This is now handled by the context
         onTypeFilter={setSelectedTypes}
         onRarityFilter={setSelectedRarity}
         types={uniqueTypes}
